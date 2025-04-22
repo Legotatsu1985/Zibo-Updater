@@ -10,6 +10,14 @@ from tkinter import filedialog
 def get_saved_xplane_path():
     xplane_path_entry.delete(0, tkinter.END)
     xplnae_path_save_file = r'x-plane_path.txt'
+    if os.path.isfile(xplnae_path_save_file):
+        with open(xplnae_path_save_file, mode='r') as file:
+            lines = file.read()
+        if re.search(r"X-Plane 12", lines):
+            xplane_path = lines[7:]
+            print('X-Plane 12 path = ' + xplane_path)
+            xplane_path_entry.insert(tkinter.END, xplane_path)
+            return xplane_path
 
 def save_xplane_path():
     if save_xplane_path_checkbox.get():
