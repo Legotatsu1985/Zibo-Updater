@@ -7,25 +7,20 @@ import tkinter
 import tkinter.messagebox
 from tkinter import filedialog
 
+def get_saved_xplane_path():
+    xplane_path_entry.delete(0, tkinter.END)
+    xplnae_path_save_file = r'x-plane_path.txt'
+
 def save_xplane_path():
     if save_xplane_path_checkbox.get():
         if not xplane_path_entry.get() == '':
             xplane_path = xplane_path_entry.get()
             
-            if not xplane_path.rfind('X-Plane 11') == -1:
-                xplane_version = 11
-            elif not xplane_path.rfind('X-Plane 12') == -1:
-                xplane_version = 12
-            else:
-                return
-            
             print("X-Plane path = " + xplane_path)
-            xplane_path_save_file = 'x-plane_path.txt'
+            xplane_path_save_file = r'x-plane_path.txt'
             
-            print("X-Plane version = " + str(xplane_version))
-            
-            #with open(xplane_path_save_file, mode='w') as file:
-            #    file.write(xplane_path)
+            with open(xplane_path_save_file, mode='w') as file:
+                file.write('Path = ' + xplane_path)
         else:
             return
 
@@ -50,7 +45,7 @@ def select_update_file():
     if not update_file_path == "":
         update_file_path_entry.insert(tkinter.END, update_file_path)
         update_file_basename = os.path.basename(update_file_path)
-        update_file = re.match(r'B738X_XP(11|12)_4_[0-9]*_[0-9]*.zip', update_file_basename)
+        update_file = re.match(r'B738X_XP12_4_[0-9]{2}_[0-9]{2}.zip', update_file_basename)
         if bool(update_file):
             update_file_verify_text.config(text="Valid", fg="green")
         else:
