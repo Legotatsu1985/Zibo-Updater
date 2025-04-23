@@ -17,12 +17,17 @@ def get_saved_xplane_path():
             xplane_path = lines[7:]
             print('X-Plane 12 path = ' + xplane_path)
             xplane_path_entry.insert(tkinter.END, xplane_path)
+            save_xplane_path_checkbox.set(True)
             return xplane_path
+        else:
+            return
+    else:
+        return
 
 def save_xplane_path():
-    if save_xplane_path_checkbox.get():
-        if not xplane_path_entry.get() == '':
-            xplane_path = xplane_path_entry.get()
+    if save_xplane_path_checkbox.get() == True: #The checkbox is checked
+        if not xplane_path_entry.get() == '': #The entry is not empty
+            xplane_path = xplane_path_entry.get() 
             
             print("X-Plane path = " + xplane_path)
             xplane_path_save_file = r'x-plane_path.txt'
@@ -31,6 +36,10 @@ def save_xplane_path():
                 file.write('Path = ' + xplane_path)
         else:
             return
+    elif save_xplane_path_checkbox.get() == False: #The checkbox is unchecked
+        if os.path.isfile(r'x-plane_path.txt'):
+            os.remove(r'x-plane_path.txt')
+        return
 
 def select_xplane_path():
     xplane_path_entry.delete(0, tkinter.END)
@@ -79,6 +88,7 @@ update_file_path_entry = tkinter.Entry(root, width=35)
 update_file_path_select_button = tkinter.Button(root, text="...", command=select_update_file)
 update_file_verify_text = tkinter.Label(root, justify="center")
 start_update_button = tkinter.Button(root, text="UPDATE")
+get_saved_xplane_path()
 
 xplane_path_label.grid(
     column=0,
