@@ -7,7 +7,7 @@ import tkinter
 import tkinter.messagebox
 from tkinter import filedialog
 
-def get_saved_xplane_path():
+def get_saved_xplane_path(): #Get the saved X-Plane path from the file
     xplane_path_entry.delete(0, tkinter.END)
     xplnae_path_save_file = r'x-plane_path.txt'
     if os.path.isfile(xplnae_path_save_file):
@@ -24,7 +24,7 @@ def get_saved_xplane_path():
     else:
         return
 
-def save_xplane_path():
+def save_xplane_path(): #Save the X-Plane path to a file
     if save_xplane_path_checkbox.get() == True: #The checkbox is checked
         if not xplane_path_entry.get() == '': #The entry is not empty
             xplane_path = xplane_path_entry.get() 
@@ -41,7 +41,7 @@ def save_xplane_path():
             os.remove(r'x-plane_path.txt')
         return
 
-def select_xplane_path():
+def select_xplane_path(): #Select the X-Plane path
     xplane_path_entry.delete(0, tkinter.END)
     xplane_path = filedialog.askdirectory(initialdir=os.path.abspath('.'), title="Select the X-Plane root path.")
     if not xplane_path == "":
@@ -56,7 +56,7 @@ def select_xplane_path():
         xplane_path_entry.delete(0, tkinter.END)
         return
 
-def select_update_file():
+def select_update_file(): #Select the update file
     update_file_path_entry.delete(0, tkinter.END)
     update_file_path = filedialog.askopenfilename(filetypes=[('ZIP file','*.zip')], initialdir=os.path.abspath('.'), title="Select the update file for Zibo 737.")
     if not update_file_path == "":
