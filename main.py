@@ -37,8 +37,8 @@ def save_xplane_path(): #Save the X-Plane path to a file
         else:
             return
     elif save_xplane_path_checkbox.get() == False: #The checkbox is unchecked
-        if os.path.isfile(r'x-plane_path.txt'):
-            os.remove(r'x-plane_path.txt')
+        if os.path.isfile(r'x-plane_path.txt'): #The file exists
+            os.remove(r'x-plane_path.txt') #then delete the file
         return
 
 def select_xplane_path(): #Select the X-Plane path
