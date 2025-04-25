@@ -30,10 +30,22 @@ def get_zibo_737_path():
         zibo737_path = xplane_path + r"\Aircraft\B737-800X"
         if os.path.isfile(zibo737_path + r"\b738_4k.acf"):
             print('Zibo737 Found.')
+            return zibo737_path
         else:
             print('Could not find Zibo737.')
+            return None
     else:
         print('Could not find X-Plane 12.')
+        return None
+
+def check_zibo_737_version():
+    zibo737_path = get_zibo_737_path()
+    if not zibo737_path == None:
+        zibo737_version_file = zibo737_path + r"\version.txt"
+        with open(zibo737_version_file, mode='r') as file:
+            zibo737_version_int = file.read()
+            print("Zibo737 Version = " + zibo737_version_int)
+            
 
 def save_xplane_path(): #Save the X-Plane path to a file
     if save_xplane_path_checkbox.get() == True: #The checkbox is checked
@@ -60,7 +72,7 @@ def select_xplane_path(): #Select the X-Plane path
         if os.path.isfile(xplane_path + r"\X-Plane.exe"):
             print('X-Plane 12 path = ' + xplane_path)
             xplane_path_verify_text.config(text="Valid", fg="green")
-            get_zibo_737_path()
+            check_zibo_737_version()
             return
         else:
             print('Invalid X-Plane 12 Path.')
@@ -105,7 +117,7 @@ update_file_path_select_button = tkinter.Button(root, text="...", command=select
 update_file_verify_text = tkinter.Label(root, justify="center")
 start_update_button = tkinter.Button(root, text="UPDATE")
 get_saved_xplane_path()
-get_zibo_737_path()
+check_zibo_737_version()
 
 xplane_path_label.grid(
     column=0,
