@@ -15,7 +15,7 @@ def get_saved_xplane_path(): #Get the saved X-Plane path from the file
             lines = file.read()
         if re.search(r"X-Plane 12", lines):
             xplane_path = lines[7:]
-            print('X-Plane 12 path = ' + xplane_path)
+            print('X-Plane 12 Path = ' + xplane_path)
             xplane_path_entry.insert(tkinter.END, xplane_path)
             save_xplane_path_checkbox.set(True)
             return xplane_path
@@ -24,12 +24,23 @@ def get_saved_xplane_path(): #Get the saved X-Plane path from the file
     else:
         return
 
+def get_zibo_737_path():
+    if not xplane_path_entry.get() == '': ##The entry is not empty
+        xplane_path = xplane_path_entry.get()
+        zibo737_path = xplane_path + r"\Aircraft\B737-800X"
+        if os.path.isfile(zibo737_path + r"\b738_4k.acf"):
+            print('Zibo737 Found.')
+        else:
+            print('Could not find Zibo737.')
+    else:
+        print('Could not find X-Plane 12.')
+
 def save_xplane_path(): #Save the X-Plane path to a file
     if save_xplane_path_checkbox.get() == True: #The checkbox is checked
         if not xplane_path_entry.get() == '': #The entry is not empty
             xplane_path = xplane_path_entry.get() 
             
-            print("X-Plane path = " + xplane_path)
+            print("X-Plane Path = " + xplane_path)
             xplane_path_save_file = r'x-plane_path.txt'
             
             with open(xplane_path_save_file, mode='w') as file:
@@ -47,11 +58,16 @@ def select_xplane_path(): #Select the X-Plane path
     if not xplane_path == "":
         xplane_path_entry.insert(tkinter.END, xplane_path)
         if os.path.isfile(xplane_path + r"\X-Plane.exe"):
+            print('X-Plane 12 path = ' + xplane_path)
             xplane_path_verify_text.config(text="Valid", fg="green")
+            get_zibo_737_path()
+            return
         else:
+            print('Invalid X-Plane 12 Path.')
             xplane_path_verify_text.config(text="Invalid", fg="red")
             tkinter.Tk().withdraw()
             tkinter.messagebox.showerror('Error','"X-Plane.exe" not found. Please select the path again.')
+            return
     else:
         xplane_path_entry.delete(0, tkinter.END)
         return
@@ -76,7 +92,7 @@ root = tkinter.Tk()
 root.title("Zibo737 Easy Updater")
 root.geometry("450x200")
 software_version = "v0.0.1"
-xplane_path_label = tkinter.Label(root, justify="right", text="X-Plane 11/12 installed path ->")
+xplane_path_label = tkinter.Label(root, justify="right", text="X-Plane 12 installed path ->")
 xplane_path_entry = tkinter.Entry(root, width=35)
 xplane_path_select_button = tkinter.Button(root, text="...", command=select_xplane_path)
 xplane_path_verify_text = tkinter.Label(root, justify="center")
@@ -89,6 +105,7 @@ update_file_path_select_button = tkinter.Button(root, text="...", command=select
 update_file_verify_text = tkinter.Label(root, justify="center")
 start_update_button = tkinter.Button(root, text="UPDATE")
 get_saved_xplane_path()
+get_zibo_737_path()
 
 xplane_path_label.grid(
     column=0,
