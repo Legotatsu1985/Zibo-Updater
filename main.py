@@ -100,6 +100,17 @@ def select_update_file(): #Select the update file
         update_file_path_entry.delete(0, tkinter.END)
         return
 
+def update_zibo_737():
+    zibo_737_path = get_zibo_737_path()
+    if not zibo_737_path == None:
+        print('(Test log: Zibo737 path found)')
+        
+    else:
+        tkinter.Tk().withdraw()
+        tkinter.messagebox.showerror('Error', 'X-Plane 12 path or Zibo737 not found. Please re-select the path.')
+        print('Path error ocurred.')
+        return
+
 root = tkinter.Tk()
 root.title("Zibo737 Easy Updater")
 root.geometry("450x200")
@@ -115,7 +126,8 @@ update_file_path_label = tkinter.Label(root, justify="right", text="Update file 
 update_file_path_entry = tkinter.Entry(root, width=35)
 update_file_path_select_button = tkinter.Button(root, text="...", command=select_update_file)
 update_file_verify_text = tkinter.Label(root, justify="center")
-start_update_button = tkinter.Button(root, text="UPDATE")
+start_update_button = tkinter.Button(root, text="UPDATE", command=update_zibo_737)
+exit_button = tkinter.Button(root, text="EXIT", command=root.quit)
 get_saved_xplane_path()
 check_zibo_737_version()
 
@@ -168,5 +180,9 @@ update_file_verify_text.grid(
 start_update_button.grid(
     column=1,
     row=3
+)
+exit_button.grid(
+    column=1,
+    row=4
 )
 root.mainloop()
