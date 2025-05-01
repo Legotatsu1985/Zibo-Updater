@@ -45,7 +45,9 @@ def check_zibo_737_version():
         with open(zibo737_version_file, mode='r') as file:
             zibo737_version_int = file.read()
             print("Zibo737 Version = " + zibo737_version_int)
-            
+            zibo_737_version_number.config(text=zibo737_version_int)
+    else:
+        return
 
 def save_xplane_path(): #Save the X-Plane path to a file
     if save_xplane_path_checkbox.get() == True: #The checkbox is checked
@@ -84,17 +86,25 @@ def select_xplane_path(): #Select the X-Plane path
         xplane_path_entry.delete(0, tkinter.END)
         return
 
+def update_file_verify(update_file_path):
+    update_file_basename = os.path.basename(update_file_path)
+    update_file = re.match(r'B738X_XP12_4_[0-9]{2}_[0-9]{2}.zip', update_file_basename)
+    if bool(update_file): #The file name is valid
+        return True
+    else: #The file name is invalid
+        return False
+
+
 def select_update_file(): #Select the update file
     update_file_path_entry.delete(0, tkinter.END)
     update_file_path = filedialog.askopenfilename(filetypes=[('ZIP file','*.zip')], initialdir=os.path.abspath('.'), title="Select the update file for Zibo 737.")
     if not update_file_path == "":
         update_file_path_entry.insert(tkinter.END, update_file_path)
-        update_file_basename = os.path.basename(update_file_path)
-        update_file = re.match(r'B738X_XP12_4_[0-9]{2}_[0-9]{2}.zip', update_file_basename)
-        if bool(update_file):
+        if update_file_verify(update_file_path) == True:
             update_file_verify_text.config(text="Valid", fg="green")
         else:
             update_file_verify_text.config(text="Invalid", fg="red")
+            tkinter.Tk().withdraw()
             tkinter.messagebox.showerror('Error','This file is invalid.')
     else:
         update_file_path_entry.delete(0, tkinter.END)
@@ -104,7 +114,14 @@ def update_zibo_737():
     zibo_737_path = get_zibo_737_path()
     if not zibo_737_path == None:
         print('(Test log: Zibo737 path found)')
-        
+        if not update_file_path_entry.get() == None:
+            update_file_path = update_file_path_entry.get()
+            if update_file_verify(update_file_path) == True:
+                print()
+            else:
+                tkinter.Tk().withdraw()
+                tkinter.messagebox.showerror('Error', 'Invalid update file.')
+                return
     else:
         tkinter.Tk().withdraw()
         tkinter.messagebox.showerror('Error', 'X-Plane 12 path or Zibo737 not found. Please re-select the path.')
@@ -124,6 +141,8 @@ save_xplane_path_checkbutton = tkinter.Checkbutton(root, variable=save_xplane_pa
 save_xplane_path_checkbutton_label = tkinter.Label(root, justify="left", text="Save the path for future updates.")
 update_file_path_label = tkinter.Label(root, justify="right", text="Update file path ->")
 update_file_path_entry = tkinter.Entry(root, width=35)
+zibo_737_version_label = tkinter.Label(root, justify="right", text="Current Zibo Version Installed =")
+zibo_737_version_number = tkinter.Label(root, justify="left")
 update_file_path_select_button = tkinter.Button(root, text="...", command=select_update_file)
 update_file_verify_text = tkinter.Label(root, justify="center")
 start_update_button = tkinter.Button(root, text="UPDATE", command=update_zibo_737)
@@ -177,12 +196,22 @@ update_file_verify_text.grid(
     column=3,
     row=2
 )
+zibo_737_version_label.grid(
+    column=0,
+    row=3,
+    sticky=tkinter.E
+)
+zibo_737_version_number.grid(
+    column=1,
+    row=3,
+    sticky=tkinter.W
+)
 start_update_button.grid(
     column=1,
-    row=3
+    row=4
 )
 exit_button.grid(
     column=1,
-    row=4
+    row=5
 )
 root.mainloop()
