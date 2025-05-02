@@ -103,7 +103,6 @@ def update_file_verify(update_file_path):
     else: #The file name is invalid
         return False
 
-
 def select_update_file(): #Select the update file
     update_file_path_entry.delete(0, tkinter.END)
     update_file_path = filedialog.askopenfilename(filetypes=[('ZIP file','*.zip')], initialdir=os.path.abspath('.'), title="Select the update file for Zibo 737.")
