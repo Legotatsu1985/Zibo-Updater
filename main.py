@@ -56,7 +56,7 @@ def check_zibo_737_version():
 
 def save_xplane_path(): #Save the X-Plane path to a file
     if save_xplane_path_checkbox.get() == True: #The checkbox is checked
-        if not xplane_path_entry.get() == '': #The entry is not empty
+        if not xplane_path_entry.get() == None: #The entry is not empty
             xplane_path = xplane_path_entry.get() 
             
             print("X-Plane Path = " + xplane_path)
@@ -65,6 +65,9 @@ def save_xplane_path(): #Save the X-Plane path to a file
             with open(xplane_path_save_file, mode='w') as file:
                 file.write('Path = ' + xplane_path)
         else:
+            tkinter.Tk().withdraw()
+            tkinter.messagebox.showerror('Error','Please select the X-Plane folder.')
+            save_xplane_path_checkbox.set(False)
             return
     elif save_xplane_path_checkbox.get() == False: #The checkbox is unchecked
         if os.path.isfile(r'x-plane_path.txt'): #The file exists
