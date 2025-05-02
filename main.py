@@ -59,6 +59,7 @@ def save_xplane_path(): #Save the X-Plane path to a file
         if not xplane_path_entry.get() == "": #The entry is not empty
             xplane_path = xplane_path_entry.get() 
             
+            print('X-Plane 12 Path saved.')
             print("X-Plane Path = " + xplane_path)
             xplane_path_save_file = r'x-plane_path.txt'
             
@@ -121,7 +122,6 @@ def select_update_file(): #Select the update file
 def update_zibo_737():
     zibo_737_path = get_zibo_737_path()
     if not zibo_737_path == None:
-        print('(Test log: Zibo737 path found)')
         if not update_file_path_entry.get() == None:
             update_file_path = update_file_path_entry.get()
             if update_file_verify(update_file_path) == True:
