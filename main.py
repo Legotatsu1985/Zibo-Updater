@@ -56,7 +56,7 @@ def check_zibo_737_version():
 
 def save_xplane_path(): #Save the X-Plane path to a file
     if save_xplane_path_checkbox.get() == True: #The checkbox is checked
-        if not xplane_path_entry.get() == None: #The entry is not empty
+        if not xplane_path_entry.get() == "": #The entry is not empty
             xplane_path = xplane_path_entry.get() 
             
             print("X-Plane Path = " + xplane_path)
