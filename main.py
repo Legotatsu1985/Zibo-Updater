@@ -139,8 +139,12 @@ def update_zibo_737():
                 
                 zibo_737_update_version_int = get_zibo_737_update_version()
                 tkinter.Tk().withdraw()
-                if tkinter.messagebox.askyesno('Update Confirmation', 'Version ' + zibo_737_update_version_int + ' will be installed. Do you want to continue?'):
+                if tkinter.messagebox.askyesno('Install Confirmation', 'Version ' + zibo_737_update_version_int + ' will be installed. Do you want to continue?'):
                     print('Copying files...')
+                    
+                    shutil.copytree(update_file_output, zibo_737_path, dirs_exist_ok=True)
+                    
+                    print('Copying completed.')
                 else:
                     shutil.rmtree(update_file_output)
                     start_update_button["state"] = "normal"
@@ -150,6 +154,10 @@ def update_zibo_737():
                 tkinter.Tk().withdraw()
                 tkinter.messagebox.showerror('Error', 'Invalid update file.')
                 return
+        else:
+            tkinter.Tk().withdraw()
+            tkinter.messagebox.showinfo('Info', 'Please select the update file.')
+            return
     else:
         tkinter.Tk().withdraw()
         tkinter.messagebox.showerror('Error', 'X-Plane 12 path or Zibo737 not found. Please re-select the path.')
