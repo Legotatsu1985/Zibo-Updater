@@ -7,6 +7,11 @@ import tkinter
 import tkinter.messagebox
 from tkinter import filedialog
 
+def init():
+    update_file_output = r'.\update_file_output'
+    if os.path.isdir(update_file_output):
+        shutil.rmtree(update_file_output)
+
 def get_saved_xplane_path(): #Get the saved X-Plane path from the file
     xplane_path_entry.delete(0, tkinter.END)
     xplnae_path_save_file = r'x-plane_path.txt'
@@ -117,7 +122,30 @@ def update_zibo_737():
         if not update_file_path_entry.get() == None:
             update_file_path = update_file_path_entry.get()
             if update_file_verify(update_file_path) == True:
-                print()
+                start_update_button["state"] = "disabled"
+                exit_button["state"] = "disabled"
+                print("Starting update...")
+                
+                update_file_output = r'.\update_file_output'
+                
+                if os.path.isdir(update_file_output):
+                    shutil.rmtree(update_file_output)
+                
+                print('Extracting...')
+                
+                shutil.unpack_archive(update_file_path, update_file_output, 'zip')
+                
+                print('Extracting completed.')
+                
+                zibo_737_update_version_int = get_zibo_737_update_version()
+                tkinter.Tk().withdraw()
+                if tkinter.messagebox.askyesno('Update Confirmation', 'Version ' + zibo_737_update_version_int + ' will be installed. Do you want to continue?'):
+                    print('Copying files...')
+                else:
+                    shutil.rmtree(update_file_output)
+                    start_update_button["state"] = "normal"
+                    exit_button["state"] = "normal"
+                    return
             else:
                 tkinter.Tk().withdraw()
                 tkinter.messagebox.showerror('Error', 'Invalid update file.')
@@ -127,6 +155,19 @@ def update_zibo_737():
         tkinter.messagebox.showerror('Error', 'X-Plane 12 path or Zibo737 not found. Please re-select the path.')
         print('Path error ocurred.')
         return
+
+def get_zibo_737_update_version():
+    zibo_737_update_version_file = r'.\update_file_output\version.txt'
+    with open(zibo_737_update_version_file, mode='r') as file:
+        zibo_737_update_version_int = file.read()
+        print("Zibo737 Update Version = " + zibo_737_update_version_int)
+        return zibo_737_update_version_int
+
+def app_exit():
+    update_file_output = r'.\update_file_output'
+    if os.path.isdir(update_file_output):
+        shutil.rmtree(update_file_output)
+    root.quit()
 
 root = tkinter.Tk()
 root.title("Zibo737 Easy Updater")
@@ -146,7 +187,8 @@ zibo_737_version_number = tkinter.Label(root, justify="left")
 update_file_path_select_button = tkinter.Button(root, text="...", command=select_update_file)
 update_file_verify_text = tkinter.Label(root, justify="center")
 start_update_button = tkinter.Button(root, text="UPDATE", command=update_zibo_737)
-exit_button = tkinter.Button(root, text="EXIT", command=root.quit)
+exit_button = tkinter.Button(root, text="EXIT", command=app_exit)
+init()
 get_saved_xplane_path()
 check_zibo_737_version()
 
