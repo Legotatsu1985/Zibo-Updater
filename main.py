@@ -142,9 +142,16 @@ def update_zibo_737():
                 if tkinter.messagebox.askyesno('Install Confirmation', 'Version ' + zibo_737_update_version_int + ' will be installed. Do you want to continue?'):
                     print('Copying files...')
                     
-                    shutil.copytree(update_file_output, zibo_737_path, dirs_exist_ok=True)
+                    shutil.copytree(update_file_output, zibo_737_path, dirs_exist_ok=True, ignore=shutil.ignore_patterns('desktop.ini'))
                     
                     print('Copying completed.')
+                    
+                    shutil.rmtree(update_file_output)
+                    start_update_button["state"] = "normal"
+                    exit_button["state"] = "normal"
+                    tkinter.Tk().withdraw()
+                    tkinter.messagebox.showinfo('Info', 'Update completed.')
+                    return
                 else:
                     shutil.rmtree(update_file_output)
                     start_update_button["state"] = "normal"
